@@ -8,11 +8,17 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "customers")
 @Entity
 public class Customer {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(
+            name = "customer_id_sequence",
+            sequenceName = "customer_id_sequence"
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "customer_id_sequence"
+    )
     private Long id;
     private String firstName;
     private String lastName;
