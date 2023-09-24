@@ -1,6 +1,6 @@
 package com.khomsi.fraud.controller;
 
-import com.khomsi.clients.fraud.model.response.FraudCheckResponse;
+import com.khomsi.clients.fraud.FraudCheckResponse;
 import com.khomsi.fraud.service.FraudService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

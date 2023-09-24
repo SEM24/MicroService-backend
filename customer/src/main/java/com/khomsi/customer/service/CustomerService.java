@@ -1,7 +1,9 @@
 package com.khomsi.customer.service;
 
+import com.khomsi.clients.fraud.FraudCheckResponse;
 import com.khomsi.clients.fraud.FraudClient;
-import com.khomsi.clients.fraud.model.response.FraudCheckResponse;
+import com.khomsi.clients.notification.NotificationClient;
+import com.khomsi.clients.notification.NotificationRequest;
 import com.khomsi.customer.CustomerRepository;
 import com.khomsi.customer.handler.exception.CustomerIsFraudsterException;
 import com.khomsi.customer.model.entity.Customer;
@@ -13,7 +15,8 @@ import org.springframework.web.client.RestTemplate;
 public record CustomerService(
         CustomerRepository customerRepo,
         RestTemplate restTemplate,
-        FraudClient fraudClient) {
+        FraudClient fraudClient,
+        NotificationClient notificationClient) {
     public void registerCustomer(CustomerRegistrationRequest request) {
         Customer customer = Customer.builder()
                 .firstName(request.firstName())
@@ -28,5 +31,11 @@ public record CustomerService(
         if (response.isFraudster()) {
             throw new CustomerIsFraudsterException();
         }
+        notificationClient.sendNotification(
+                new NotificationRequest(
+                        customer.getId(), customer.getEmail(),
+                        String.format("Hello %s, welcome to WebSite!", customer.getFirstName())
+                ));
+
     }
 }

@@ -1,4 +1,4 @@
-package com.khomsi.clients.fraud.model.response;
+package com.khomsi.clients.fraud;
 
 public record FraudCheckResponse(Boolean isFraudster) {
 }
