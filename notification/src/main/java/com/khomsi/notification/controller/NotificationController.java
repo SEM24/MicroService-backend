@@ -9,10 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/v1/notification")
 @Tag(name = "Notification Controller", description = "CRUD for Notification Controller")
 public record NotificationController(NotificationService notificationService) {
-    @PostMapping
+    @PostMapping("api/v1/notification")
     public void sendNotification(@RequestBody NotificationRequest request) {
         notificationService.send(request);
     }
