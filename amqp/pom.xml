@@ -8,9 +8,14 @@
     </parent>
 
     <groupId>com.khomsi</groupId>
-    <artifactId>clients</artifactId>
+    <artifactId>amqp</artifactId>
     <packaging>jar</packaging>
 
-    <name>clients</name>
-
+    <name>amqp</name>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+    </dependencies>
 </project>

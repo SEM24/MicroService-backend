@@ -1,8 +1,8 @@
 package com.khomsi.customer.service;
 
+import com.khomsi.amqp.RabbitMQMessageProducer;
 import com.khomsi.clients.fraud.FraudCheckResponse;
 import com.khomsi.clients.fraud.FraudClient;
-import com.khomsi.clients.notification.NotificationClient;
 import com.khomsi.clients.notification.NotificationRequest;
 import com.khomsi.customer.CustomerRepository;
 import com.khomsi.customer.handler.exception.CustomerIsFraudsterException;
@@ -16,7 +16,8 @@ public record CustomerService(
         CustomerRepository customerRepo,
         RestTemplate restTemplate,
         FraudClient fraudClient,
-        NotificationClient notificationClient) {
+        RabbitMQMessageProducer producer
+) {
     public void registerCustomer(CustomerRegistrationRequest request) {
         Customer customer = Customer.builder()
                 .firstName(request.firstName())
@@ -31,11 +32,12 @@ public record CustomerService(
         if (response.isFraudster()) {
             throw new CustomerIsFraudsterException();
         }
-        notificationClient.sendNotification(
-                new NotificationRequest(
-                        customer.getId(), customer.getEmail(),
-                        String.format("Hello %s, welcome to WebSite!", customer.getFirstName())
-                ));
-
+        NotificationRequest notificationRequest = new NotificationRequest(
+                customer.getId(), customer.getEmail(),
+                String.format("Hello %s, welcome to WebSite!", customer.getFirstName())
+        );
+        producer.publish(notificationRequest,
+                "internal.exchange",
+                "internal.notification.routing-key");
     }
 }

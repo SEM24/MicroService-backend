@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @Tag(name = "Customer Controller", description = "CRUD for Customer Controller")
-@RequestMapping("api/v1/customer")
+@RequestMapping("api/v1/customers")
 public record CustomerController(CustomerService customerService) {
     @PostMapping
     public void registerCustomer(@RequestBody CustomerRegistrationRequest request) {
